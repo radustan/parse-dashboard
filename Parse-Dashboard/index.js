@@ -8,7 +8,7 @@
 // Command line tool for npm start
 
 var DEFAULT_DASHBOARD_CONFIG = __dirname + '/parse-dashboard-config.json';
-console.log('here');
+
 var program = require("commander");
 program.option('--port [port]', "the port to run parse-dashboard");
 program.option('--config [config]', "the path to the configuration file");
@@ -17,7 +17,7 @@ program.option('--allowInsecureHTTP [allowInsecureHTTP]', 'set that flag when pa
 program.parse(process.argv);
 
 // collect the variables
-var DEFAULT_DASHBOARD_CONFIG;
+var configFile = program.config || DEFAULT_DASHBOARD_CONFIG;
 var port = program.port || process.env.PORT;
 var allowInsecureHTTP = program.allowInsecureHTTP || process.env.PARSE_DASHBOARD_ALLOW_INSECURE_HTTP;
 
@@ -64,10 +64,10 @@ app.get('/parse-dashboard-config.json', function(req, res) {
       req.connection.remoteAddress === '127.0.0.1' ||
       req.connection.remoteAddress === '::ffff:127.0.0.1' ||
       req.connection.remoteAddress === '::1';
-    //if (!requestIsLocal && !req.secure && !allowInsecureHTTP) {
+    if (!requestIsLocal && !req.secure && !allowInsecureHTTP) {
       //Disallow HTTP requests except on localhost, to prevent the master key from being transmitted in cleartext
-    //  return res.send({ success: false, error: 'Parse Dashboard can only be remotely accessed via HTTPS' });
-   // }
+      return res.send({ success: false, error: 'Parse Dashboard can only be remotely accessed via HTTPS' });
+    }
 
     if (!requestIsLocal && !users) {
       //Accessing the dashboard over the internet can only be done with username and password
