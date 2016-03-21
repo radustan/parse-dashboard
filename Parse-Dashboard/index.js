@@ -8,7 +8,7 @@
 // Command line tool for npm start
 
 var DEFAULT_DASHBOARD_CONFIG = __dirname + '/parse-dashboard-config.json';
-
+console.log('here');
 var program = require("commander");
 program.option('--port [port]', "the port to run parse-dashboard");
 program.option('--config [config]', "the path to the configuration file");
@@ -17,7 +17,7 @@ program.option('--allowInsecureHTTP [allowInsecureHTTP]', 'set that flag when pa
 program.parse(process.argv);
 
 // collect the variables
-var configFile = program.config || DEFAULT_DASHBOARD_CONFIG;
+var DEFAULT_DASHBOARD_CONFIG;
 var port = program.port || process.env.PORT;
 var allowInsecureHTTP = program.allowInsecureHTTP || process.env.PARSE_DASHBOARD_ALLOW_INSECURE_HTTP;
 
