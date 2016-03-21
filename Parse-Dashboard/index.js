@@ -8,7 +8,7 @@
 // Command line tool for npm start
 
 var DEFAULT_DASHBOARD_CONFIG = __dirname + '/parse-dashboard-config.json';
-
+return res.send({ success: false, error: 'Erorare pe aici' });
 var program = require("commander");
 program.option('--port [port]', "the port to run parse-dashboard");
 program.option('--config [config]', "the path to the configuration file");
