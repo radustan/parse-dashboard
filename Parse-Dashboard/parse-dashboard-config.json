@@ -7,7 +7,7 @@
       "appName": "MyApp"
     },
     {
-      "serverURL": "http://parse-2.herokuapp.com/parse",
+      "serverURL": "http://parse-2.herokuapp.com/parse"zxzxweer,
       "appId": "APPLICATION_ID",
       "masterKey": "myMasterKey",
       "appName": "App2"
