@@ -1,10 +1,16 @@
 {
   "apps": [
     {
-      "serverURL": "http://parse-2.herokuapp.com/parse",
+      "serverURL": "http://127.0.0.1:1337/parse",
       "appId": "APPLICATION_ID",
       "masterKey": "myMasterKey",
       "appName": "MyApp"
+    },
+    {
+      "serverURL": "http://parse-2.herokuapp.com/parse",
+      "appId": "APPLICATION_ID",
+      "masterKey": "myMasterKey",
+      "appName": "App2"
     }
   ]
 }
