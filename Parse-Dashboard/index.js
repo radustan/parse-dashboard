@@ -48,6 +48,7 @@ app.get('/parse-dashboard-config.json', function(req, res) {
         return res.send({ success: false, error: 'An application is misconfigured, appName is required' });
       }
     });
+  return res.send({ success: false, error: 'An application is misconfigured, appName is required' });
     var response = {
       apps: config.data.apps,
       newFeaturesInLatestVersion: newFeaturesInLatestVersion,
