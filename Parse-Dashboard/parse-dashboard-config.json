@@ -12,5 +12,15 @@
       "masterKey": "myMasterKey",
       "appName": "App2"
     }
+  ],
+  "users": [
+    {
+      "user":"user1",
+      "pass":"pass"
+    },
+    {
+      "user":"user2",
+      "pass":"pass"
+    }
   ]
 }

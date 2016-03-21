@@ -64,10 +64,10 @@ app.get('/parse-dashboard-config.json', function(req, res) {
       req.connection.remoteAddress === '127.0.0.1' ||
       req.connection.remoteAddress === '::ffff:127.0.0.1' ||
       req.connection.remoteAddress === '::1';
-    if (!requestIsLocal && !req.secure && !allowInsecureHTTP) {
+    //if (!requestIsLocal && !req.secure && !allowInsecureHTTP) {
       //Disallow HTTP requests except on localhost, to prevent the master key from being transmitted in cleartext
-      return res.send({ success: false, error: 'Parse Dashboard can only be remotely accessed via HTTPS' });
-    }
+    //  return res.send({ success: false, error: 'Parse Dashboard can only be remotely accessed via HTTPS' });
+   // }
 
     if (!requestIsLocal && !users) {
       //Accessing the dashboard over the internet can only be done with username and password
