@@ -29,10 +29,10 @@ const currentVersionFeatures = require('../package.json').parseDashboardFeatures
 var newFeaturesInLatestVersion = [];
 packageJson('parse-dashboard').then(latestPackage => {
   if (latestPackage.parseDashboardFeatures instanceof Array) {
-  newFeaturesInLatestVersion = parseDashboardFeatures.filter(feature => {
-        return currentVersionFeatures.indexOf(feature) === -1;
-});
-}
+    newFeaturesInLatestVersion = parseDashboardFeatures.filter(feature => {
+      return currentVersionFeatures.indexOf(feature) === -1;
+    });
+  }
 });
 
 const port = program.port || process.env.PORT || 4040;
@@ -78,47 +78,47 @@ if (configFile) {
 }
 p.then(config => {
   config.data.apps.forEach(app => {
-  if (!app.appName) {
-  app.appName = app.appId;
-}
-});
+    if (!app.appName) {
+      app.appName = app.appId;
+    }
+  });
 
-const app = express();
+  const app = express();
 
-// Serve public files.
-app.use(express.static(path.join(__dirname,'public')));
+  // Serve public files.
+  app.use(express.static(path.join(__dirname,'public')));
 
-// Serve the configuration.
-app.get('/parse-dashboard-config.json', function(req, res) {
-  const response = {
-    apps: config.data.apps,
-    newFeaturesInLatestVersion: newFeaturesInLatestVersion,
-  };
-  const users = config.data.users;
+  // Serve the configuration.
+  app.get('/parse-dashboard-config.json', function(req, res) {
+    const response = {
+      apps: config.data.apps,
+      newFeaturesInLatestVersion: newFeaturesInLatestVersion,
+    };
+    const users = config.data.users;
 
-  let auth = null;
-  //If they provide auth when their config has no users, ignore the auth
-  if (users) {
-    auth = basicAuth(req);
-  }
+    let auth = null;
+    //If they provide auth when their config has no users, ignore the auth
+    if (users) {
+      auth = basicAuth(req);
+    }
 
-  //Based on advice from Doug Wilson here:
-  //https://github.com/expressjs/express/issues/2518
-  const requestIsLocal =
+    //Based on advice from Doug Wilson here:
+    //https://github.com/expressjs/express/issues/2518
+    const requestIsLocal =
       req.connection.remoteAddress === '127.0.0.1' ||
       req.connection.remoteAddress === '::ffff:127.0.0.1' ||
       req.connection.remoteAddress === '::1';
-  // if (!requestIsLocal && !req.secure && !allowInsecureHTTP) {
-  //   //Disallow HTTP requests except on localhost, to prevent the master key from being transmitted in cleartext
-  //   return res.send({ success: false, error: 'Parse Dashboard can only be remotely accessed via HTTPS' });
-  // }
+    if (!requestIsLocal && !req.secure && !allowInsecureHTTP) {
+      //Disallow HTTP requests except on localhost, to prevent the master key from being transmitted in cleartext
+      return res.send({ success: false, error: 'Parse Dashboard can only be remotely accessed via HTTPS' });
+    }
 
-  if (!requestIsLocal && !users) {
-    //Accessing the dashboard over the internet can only be done with username and password
-    return res.send({ success: false, error: 'Configure a user to access Parse Dashboard remotely' });
-  }
+    if (!requestIsLocal && !users) {
+      //Accessing the dashboard over the internet can only be done with username and password
+      return res.send({ success: false, error: 'Configure a user to access Parse Dashboard remotely' });
+    }
 
-  const successfulAuth =
+    const successfulAuth =
       //they provided auth
       auth &&
       //there are configured users
@@ -126,38 +126,38 @@ app.get('/parse-dashboard-config.json', function(req, res) {
       //the provided auth matches one of the users
       users.find(user => {
         return user.user == auth.name &&
-        user.pass == auth.pass
+               user.pass == auth.pass
       });
-  if (successfulAuth) {
-    //They provided correct auth
-    return res.json(response);
-  }
+    if (successfulAuth) {
+      //They provided correct auth
+      return res.json(response);
+    }
 
-  if (users || auth) {
-    //They provided incorrect auth
-    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.sendStatus(401);
-  }
+    if (users || auth) {
+      //They provided incorrect auth
+      res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+      return res.sendStatus(401);
+    }
 
-  //They didn't provide auth, and have configured the dashboard to not need auth
-  //(ie. didn't supply usernames and passwords)
-  if (requestIsLocal) {
-    //Allow no-auth access on localhost only, if they have configured the dashboard to not need auth
-    return res.json(response);
-  }
-  //We shouldn't get here. Fail closed.
-  res.send({ success: false, error: 'Something went wrong.' });
-});
+    //They didn't provide auth, and have configured the dashboard to not need auth
+    //(ie. didn't supply usernames and passwords)
+    if (requestIsLocal) {
+      //Allow no-auth access on localhost only, if they have configured the dashboard to not need auth
+      return res.json(response);
+    }
+    //We shouldn't get here. Fail closed.
+    res.send({ success: false, error: 'Something went wrong.' });
+  });
 
-// For every other request, go to index.html. Let client-side handle the rest.
-app.get('/*', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+  // For every other request, go to index.html. Let client-side handle the rest.
+  app.get('/*', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+  });
 
-// Start the server.
-app.listen(port);
+  // Start the server.
+  app.listen(port);
 
-console.log(`The dashboard is now available at http://localhost:${port}/`);
+  console.log(`The dashboard is now available at http://localhost:${port}/`);
 }, error => {
   if (error instanceof SyntaxError) {
     console.log('Your config file contains invalid JSON. Exiting.');
@@ -177,5 +177,5 @@ console.log(`The dashboard is now available at http://localhost:${port}/`);
 })
 .catch(error => {
   console.log('There was a problem loading the dashboard. Exiting.');
-process.exit(-1);
+  process.exit(-1);
 });
